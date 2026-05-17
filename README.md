@@ -1,208 +1,260 @@
-# AI Agent Team — Supervisor Pattern
-### Flowise AgentFlows V2/V3 — Dynamic Multi-Agent Routing
+# AI Agent Team Supervisor Pattern
 
-A production-ready multi-agent software development team 
-built using Flowise AgentFlows V2/V3. A Supervisor agent 
-dynamically routes work between a Software Engineer and 
-Code Reviewer, iterating until the solution is complete — 
-then synthesizes a final production-ready deliverable.
+Enterprise-grade multi-agent orchestration workflow for autonomous software delivery, review governance, and AI engineering collaboration.
 
 ---
 
-## System Architecture
+# Overview
 
-\`\`\`
-User Request (chat input)
-        ↓
-┌─────────────────────────────────────────┐
-│         SUPERVISOR (gpt-4o-mini)        │
-│  Routes work to the right specialist   │
-│  Decides: SOFTWARE | REVIEWER | FINISH │
-└──────────────┬──────────────────────────┘
-               ↓
-    ┌──────────────────────┐
-    │   CONDITION ROUTER   │
-    │  Reads $flow.state   │
-    └──┬───────────┬───────┘
-       │           │          │
-       ▼           ▼          ▼
-  SOFTWARE     REVIEWER    FINISH
-  ENGINEER     (QA Eng)      │
-  Full Stack   Quality       │
-  Developer    Assurance     │
-       │           │          │
-    Loop↑       Loop↑         │
-   (max 5)    (max 5)         │
-       └───────────┘          │
-               └──────┬───────┘
-                      ↓
-          ┌───────────────────────┐
-          │   FINAL ANSWER AGENT │
-          │  Full code solution  │
-          │  + improvements      │
-          │  + QA review         │
-          └───────────────────────┘
-\`\`\`
+This project demonstrates a production-inspired supervisor-agent architecture where multiple AI agents collaborate as a structured engineering organization.
+
+The system simulates:
+- Software Engineering
+- Code Review
+- QA Governance
+- Architecture Validation
+- Delivery Synthesis
+
+instead of relying on a single monolithic AI response.
 
 ---
 
-## Agent Roles
+# Core Architecture
 
-| Agent | Role | Responsibility |
-|---|---|---|
-| Supervisor | Orchestrator | Routes tasks, manages flow state, decides when work is complete |
-| Software Engineer | Developer | Full stack web development based on supervisor instructions |
-| Code Reviewer | QA Engineer | Quality assurance, bug detection, improvement suggestions |
-| Final Answer | Synthesizer | Combines full conversation into production-ready deliverable |
+```text
+User Request
+      ↓
+Supervisor Agent
+      ↓
+Task Planning & Routing
+      ↓
+─────────────────────────
+↓                       ↓
+Software Engineer    Reviewer / QA
+↓                       ↓
+Implementation      Validation
+↓                       ↓
+──────── Loop / Retry ────────
+      ↓
+Final Engineering Synthesis
+      ↓
+Production Delivery Package
+```
 
 ---
 
-## Key Features
+# Key Features
 
-- Supervisor-pattern dynamic routing — not fixed linear chaining
-- Structured output routing via enum state (SOFTWARE / REVIEWER / FINISH)
-- Shared flow state management ($flow.state.next / instructions)
-- Loop control — each agent iterates up to 5 times per cycle
-- Full conversation memory shared across all agents
-- Synthesis agent produces unified final deliverable
-- Built on Flowise AgentFlows V2/V3 framework
+## Supervisor-Based Orchestration
+The Supervisor agent:
+- decomposes tasks
+- routes work
+- manages review lifecycle
+- tracks execution state
+- prevents recursive loops
 
 ---
 
-## How the Supervisor Routes Work
+## Structured Multi-Agent Workflow
 
-The Supervisor uses structured output to decide the next worker:
-
-| Decision | Action |
+### Agents Included
+| Agent | Responsibility |
 |---|---|
-| `SOFTWARE` | Routes to Software Engineer for development |
-| `REVIEWER` | Routes to Code Reviewer for QA |
-| `FINISH` | Routes to Final Answer synthesis |
-
-Each routing decision includes specific instructions passed
-via `$flow.state.instructions` to the receiving agent.
+| Supervisor | Task planning and routing |
+| Software Engineer | Production implementation |
+| Reviewer / QA | Validation and governance |
+| Final Synthesizer | Delivery packaging |
 
 ---
 
-## Tech Stack
+## Review Lifecycle
 
-- **Flowise AgentFlows V2/V3** — visual agentic workflow engine
-- **OpenAI API** — gpt-4o-mini (all agents)
-- **LangChain** — agent orchestration framework
-- **Condition Nodes** — dynamic state-based routing
-- **Loop Nodes** — iterative refinement control
+```text
+PENDING
+    ↓
+CHANGES_REQUIRED
+    ↓
+APPROVED
+```
 
 ---
 
-## Agent Configuration
+# Enhanced Capabilities
 
-| Setting | Value |
+## Production-Oriented Outputs
+The workflow produces:
+- Architecture diagrams
+- Engineering plans
+- Production code
+- Scalability reviews
+- Security analysis
+- QA findings
+- Deployment recommendations
+
+---
+
+## Execution State Tracking
+
+The workflow maintains runtime state including:
+
+```json
+{
+  "currentTask": "",
+  "reviewStatus": "",
+  "qualityScore": 0,
+  "iterationCount": 0,
+  "instructions": ""
+}
+```
+
+---
+
+## Governance & Safety
+
+### Added Controls
+- Loop protection
+- Retry limits
+- Escalation fallbacks
+- Structured JSON outputs
+- Deterministic orchestration
+- Reviewer approval gates
+
+---
+
+# Example Use Cases
+
+## Software Engineering
+- SaaS platforms
+- AI applications
+- Enterprise systems
+- Research tools
+- Educational applications
+
+---
+
+## Research Example
+
+Example generated project:
+
+### Renaissance Research AI
+An AI-powered research platform for graduate students studying 15th century Italian Renaissance paintings.
+
+Features included:
+- semantic artwork search
+- manuscript OCR
+- citation generation
+- AI research assistant
+- collaborative annotations
+- visual similarity search
+
+---
+
+# Example Workflow Output
+
+The system can autonomously generate:
+
+## Product Architecture
+```text
+Frontend: Next.js
+Backend: FastAPI
+Database: PostgreSQL
+Vector DB: Pinecone
+AI Stack: OpenAI + LangGraph
+```
+
+---
+
+## Database Schemas
+```sql
+CREATE TABLE paintings (
+    id UUID PRIMARY KEY,
+    title TEXT,
+    artist TEXT,
+    embedding VECTOR(1536)
+);
+```
+
+---
+
+## Reviewer Governance
+Reviewer agent validates:
+- scalability
+- security
+- maintainability
+- architecture alignment
+- edge cases
+- production readiness
+
+---
+
+# Technical Stack
+
+## AI Models
+- GPT-4o
+- GPT-4o-mini
+
+## Workflow Engine
+- AgentFlow / Flowise-style orchestration
+
+## Infrastructure
+- Docker
+- AWS
+- Vercel
+- Supabase
+- Redis
+
+---
+
+# Why This Architecture Matters
+
+Most AI agent demos are:
+- linear
+- stateless
+- non-deterministic
+- lacking governance
+
+This project introduces:
+- structured orchestration
+- review loops
+- execution state
+- production governance
+- engineering-style collaboration
+
+The result is a more scalable and enterprise-oriented AI workflow.
+
+---
+
+# Future Roadmap
+
+## Planned Enhancements
+- Planner/Executor split
+- Multi-reviewer architecture
+- Tool execution sandboxing
+- Persistent memory
+- LangSmith tracing
+- Cost-aware routing
+- Human approval checkpoints
+- Autonomous testing agents
+
+---
+
+# Files Included
+
+| File | Description |
 |---|---|
-| Model | gpt-4o-mini |
-| Temperature | 0.9 |
-| Memory | All messages (shared) |
-| Max Loops | 5 per agent |
-| Routing | Enum structured output |
-| Framework | Flowise AgentFlows V2/V3 |
+| AI Agent Teams Agents Enhanced.json | Enhanced multi-agent workflow |
+| CHANGELOG.md | Release history |
+| Renaissance_Research_AI_Engineering_Package.docx | Example generated engineering package |
+| workflow image | Updated workflow visualization |
 
 ---
 
-## Setup & Import
-
-1. Install and run Flowise:
-\`\`\`bash
-npm install -g flowise
-npx flowise start
-\`\`\`
-
-2. Open Flowise at `http://localhost:3000`
-
-3. Import the agent:
-   - Click **Agentflows** → **Add New**
-   - Click **Import**
-   - Upload `ai_agent_team.json`
-
-4. Add your OpenAI API key in Flowise credentials
-
-5. Click **Save** and **Deploy**
-
-6. Enter a software development request to start
-
----
-**Supervisor** analyzes the request and routes to
-Software Engineer with specific instructions.
-
-**Software Engineer** builds the implementation,
-loops back to Supervisor when complete.
-
-**Supervisor** routes to Code Reviewer for QA.
-
-**Code Reviewer** checks for bugs, security issues,
-and improvements, loops back to Supervisor.
-
-**Supervisor** decides work is complete → FINISH.
-
-**Final Answer Agent** synthesizes:
-- Full working code
-- Security improvements
-- QA review summary
-- Implementation notes
-
----
-
-## Supervisor Pattern vs Sequential Pipeline
-
-| Approach | This Repo | Previous Repo |
-|---|---|---|
-| Routing | Dynamic (Supervisor decides) | Fixed linear sequence |
-| Iteration | Loop-based (up to 5x) | Single pass |
-| Flexibility | High — any agent can be called multiple times | Low — fixed order |
-| Framework | AgentFlows V2/V3 | Sequential Agents |
-| Best for | Complex iterative tasks | Linear content pipelines |
-
----
-
-## Customization
-
-**Change the team composition**
-Replace Software Engineer and Code Reviewer with any
-specialist agents — Data Analyst, Content Writer,
-SEO Specialist, etc.
-
-**Adjust loop limits**
-Increase or decrease max loop count per agent
-in the Loop nodes.
-
-**Add more specialists**
-Add additional agent nodes and update the Supervisor's
-enum values and routing logic.
-
-**Change the model**
-Swap gpt-4o-mini for gpt-4o or any supported
-OpenAI model in each agent node.
-
----
-
-## Related Repos
-
-| Repo | Pattern | Framework |
-|---|---|---|
-| [ai-multi-agent-content-pipeline](https://github.com/Paul-Orlando/ai-multi-agent-content-pipeline) | Sequential | Flowise Sequential Agents |
-| [ai-web-scraper-research-agent](https://github.com/Paul-Orlando/ai-web-scraper-research-agent) | RAG Pipeline | Flowise + FAISS |
-| [ai-research-assistant-rag](https://github.com/Paul-Orlando/ai-research-assistant-rag) | RAG + Python | Python + OpenAI |
-
----
-
-## Changelog
-
-See [changelog.md](changelog.md) for full version history.
-
----
-
-## Author
+# Author
 
 Paul Orlando
-Creative Technologist | AI Agent Developer | Data Analytics
-🌐 [paulforlando.com](https://www.paulforlando.com)
-💼 [LinkedIn](https://www.linkedin.com/in/paul-orlando-7841b5154)
-🐙 [GitHub](https://github.com/Paul-Orlando)
+
+---
+
+# License
+
+MIT License
