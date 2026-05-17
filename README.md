@@ -249,9 +249,13 @@ The result is a more scalable and enterprise-oriented AI workflow.
 
 ---
 
-# Author
+## Author
 
 Paul Orlando
+Creative Technologist | AI Agent Developer | Data Analytics
+🌐 [paulforlando.com](https://www.paulforlando.com)
+💼 [LinkedIn](https://www.linkedin.com/in/paul-orlando-7841b5154)
+🐙 [GitHub](https://github.com/Paul-Orlando)
 
 ---
 
