@@ -2166,5 +2166,69 @@
       "type": "agentFlow",
       "id": "conditionAgentflow_0-conditionAgentflow_0-output-2-llmAgentflow_3-llmAgentflow_3"
     }
-  ]
+  ],
+  "runtimeExtensions": {
+    "pythonImplementation": {
+      "enabled": true,
+      "description": "Runnable Python orchestration runtime using shared state and multi-agent coordination.",
+      "files": [
+        "runtime/orchestrator.py",
+        "runtime/agents.py",
+        "runtime/state.py",
+        "runtime/reviewer.py",
+        "runtime/supervisor.py"
+      ]
+    },
+    "openAISDKImplementation": {
+      "enabled": true,
+      "description": "OpenAI Agents SDK implementation for production orchestration.",
+      "sdk": "openai-agents-python",
+      "features": [
+        "structured outputs",
+        "tool calling",
+        "shared workflow state",
+        "agent handoffs",
+        "retry governance"
+      ]
+    },
+    "langGraphImplementation": {
+      "enabled": true,
+      "description": "LangGraph orchestration graph equivalent of the Flowise workflow.",
+      "nodes": [
+        "planner",
+        "supervisor",
+        "software_engineer",
+        "reviewer",
+        "final_synthesizer"
+      ],
+      "stateGraph": true
+    },
+    "runnableOrchestrationLoop": {
+      "enabled": true,
+      "description": "Deterministic orchestration loop replacing Flowise visual loop logic.",
+      "maxIterations": 3,
+      "supports": [
+        "retry handling",
+        "review governance",
+        "approval lifecycle",
+        "structured routing"
+      ]
+    }
+  },
+  "codeExamples": {
+    "pythonOrchestrator": "\nfrom state import WorkflowState\nfrom supervisor import supervisor\nfrom engineer import engineer\nfrom reviewer import reviewer\n\nstate = WorkflowState()\n\nwhile state.iteration_count < 3:\n\n    decision = supervisor.run(state)\n\n    if decision.next == \"SOFTWARE\":\n        result = engineer.run(state)\n\n    elif decision.next == \"REVIEWER\":\n        result = reviewer.run(state)\n\n    elif decision.next == \"FINISH\":\n        break\n\n    state.iteration_count += 1\n",
+    "langGraphExample": "\nfrom langgraph.graph import StateGraph\n\nworkflow = StateGraph(WorkflowState)\n\nworkflow.add_node(\"supervisor\", supervisor)\nworkflow.add_node(\"engineer\", engineer)\nworkflow.add_node(\"reviewer\", reviewer)\n\nworkflow.set_entry_point(\"supervisor\")\n",
+    "openAISDKExample": "\nfrom agents import Agent\n\nsupervisor = Agent(\n    name=\"Supervisor\",\n    instructions=\"Coordinate engineering workflow\"\n)\n"
+  },
+  "enterpriseRoadmap": {
+    "nextSteps": [
+      "persistent memory",
+      "LangSmith tracing",
+      "OpenTelemetry integration",
+      "tool execution sandbox",
+      "autonomous testing agents",
+      "planner/executor separation",
+      "cost-aware routing"
+    ]
+  }
 }
