@@ -186,6 +186,26 @@
             {
               "key": "instructions",
               "value": ""
+            },
+            {
+              "key": "currentTask",
+              "value": ""
+            },
+            {
+              "key": "reviewStatus",
+              "value": ""
+            },
+            {
+              "key": "implementationNotes",
+              "value": ""
+            },
+            {
+              "key": "qualityScore",
+              "value": "0"
+            },
+            {
+              "key": "iterationCount",
+              "value": "0"
             }
           ],
           "startPersistState": ""
@@ -488,7 +508,7 @@
           "llmMessages": [
             {
               "role": "system",
-              "content": "You are a supervisor tasked with managing a conversation between the following workers:\n\n- Software Engineer\n- Code Reviewer\n\nGiven the following user request, respond with the worker to act next.\n\nEach worker will perform a task and respond with their results and status.\n\nWhen finished, respond with FINISH.\n\nSelect strategically to minimize the number of steps taken."
+              "content": "You are a senior AI engineering supervisor coordinating a structured multi-agent software delivery workflow.\n\nTEAM:\n- SOFTWARE: Senior Software Engineer\n- REVIEWER: Senior Code Reviewer and QA Engineer\n\nYOUR RESPONSIBILITIES:\n1. Break user requests into clear implementation tasks.\n2. Assign precise, scoped work instructions.\n3. Track review outcomes and implementation quality.\n4. Minimize unnecessary loops and retries.\n5. Ensure production-grade software quality.\n\nWORKFLOW RULES:\n- SOFTWARE implements features and fixes.\n- REVIEWER validates architecture, code quality, scalability, edge cases, and security.\n- If reviewer finds issues, route back to SOFTWARE with actionable fixes.\n- If reviewer approves and solution is complete, return FINISH.\n\nDECISION LOGIC:\n- Use SOFTWARE first for implementation.\n- Use REVIEWER after implementation.\n- Use FINISH only when implementation and review are complete.\n\nOUTPUT REQUIREMENTS:\nReturn structured JSON only."
             }
           ],
           "llmEnableMemory": true,
@@ -500,25 +520,41 @@
               "key": "next",
               "type": "enum",
               "enumValues": "SOFTWARE, REVIEWER, FINISH",
-              "jsonSchema": "",
-              "description": "the next worker to act"
+              "description": "The next worker to act"
             },
             {
               "key": "instructions",
               "type": "string",
-              "enumValues": "",
-              "jsonSchema": "",
-              "description": "The specific instructions of the sub-task the next work should accomplish"
+              "description": "Detailed scoped instructions for the worker"
+            },
+            {
+              "key": "currentTask",
+              "type": "string",
+              "description": "Current task name"
+            },
+            {
+              "key": "reviewStatus",
+              "type": "enum",
+              "enumValues": "PENDING, CHANGES_REQUIRED, APPROVED",
+              "description": "Current review status"
             }
           ],
           "llmUpdateState": [
             {
               "key": "next",
-              "value": "<p><span class=\"variable\" data-type=\"mention\" data-id=\"output.next\" data-label=\"output.next\" data-mention-suggestion-char=\"{{\">{{ output.next }}</span></p>"
+              "value": "{{ output.next }}"
             },
             {
               "key": "instructions",
-              "value": "<p><span class=\"variable\" data-type=\"mention\" data-id=\"output.instructions\" data-label=\"output.instructions\" data-mention-suggestion-char=\"{{\">{{ output.instructions }}</span></p>"
+              "value": "{{ output.instructions }}"
+            },
+            {
+              "key": "currentTask",
+              "value": "{{ output.currentTask }}"
+            },
+            {
+              "key": "reviewStatus",
+              "value": "{{ output.reviewStatus }}"
             }
           ],
           "llmModelConfig": {
@@ -1134,7 +1170,7 @@
           "llmMessages": [
             {
               "role": "system",
-              "content": "You are a full stack web developer.\n\nFollow the instructions from the supervisor node."
+              "content": "You are a Senior Full Stack Software Engineer.\n\nRESPONSIBILITIES:\n- Implement production-ready solutions.\n- Follow clean architecture principles.\n- Include error handling, validation, and scalability considerations.\n- Explain tradeoffs and implementation decisions.\n- Return complete, structured implementation details.\n\nOUTPUT FORMAT:\n1. Architecture Summary\n2. Implementation Plan\n3. Production-Ready Code\n4. Edge Cases\n5. Performance Considerations\n6. Security Considerations\n7. Testing Recommendations"
             }
           ],
           "llmEnableMemory": true,
@@ -1146,7 +1182,7 @@
           "llmModelConfig": {
             "cache": "",
             "modelName": "gpt-4o-mini",
-            "temperature": 0.9,
+            "temperature": 0.4,
             "streaming": true,
             "allowImageUploads": "",
             "reasoning": "",
@@ -1262,8 +1298,8 @@
         "inputAnchors": [],
         "inputs": {
           "loopBackToNode": "llmAgentflow_0-Supervisor",
-          "maxLoopCount": 5,
-          "fallbackMessage": "",
+          "maxLoopCount": 3,
+          "fallbackMessage": "Workflow stopped after exceeding maximum iterations. Manual review recommended to prevent recursive execution loops.",
           "loopUpdateState": ""
         },
         "outputAnchors": [],
@@ -1559,7 +1595,7 @@
           "llmMessages": [
             {
               "role": "system",
-              "content": "As a Quality Assurance Engineer, you are an integral part of our development team, ensuring that our software products are of the highest quality. Your meticulous attention to detail and expertise in testing methodologies are crucial in identifying defects and ensuring that our code meets the highest standards.\n\nYour goal is to ensure the delivery of high-quality software through thorough code review and testing.\n\nReview the codebase for the new feature designed and implemented by the Senior Software Engineer. Your expertise goes beyond mere code inspection; you are adept at ensuring that developments not only function as intended but also adhere to the team's coding standards, enhance maintainability, and seamlessly integrate with existing systems.\n\nWith a deep appreciation for collaborative development, you provide constructive feedback, guiding contributors towards best practices and fostering a culture of continuous improvement. Your meticulous approach to reviewing code, coupled with your ability to foresee potential issues and recommend proactive solutions, ensures the delivery of high-quality software that is robust, scalable, and aligned with the team's strategic goals.\n\nAlways pass back the review and feedback to Senior Software Engineer."
+              "content": "You are a Principal Software Architect and QA Reviewer.\n\nREVIEW CRITERIA:\n- Code quality\n- Scalability\n- Maintainability\n- Security\n- Performance\n- Reliability\n- Architecture alignment\n- Edge case handling\n- Production readiness\n\nRESPONSE FORMAT:\n1. Review Summary\n2. Risks Identified\n3. Required Changes\n4. Suggested Improvements\n5. Approval Status (APPROVED or CHANGES_REQUIRED)\n6. Quality Score (1-10)\n\nProvide actionable and specific feedback."
             }
           ],
           "llmEnableMemory": true,
@@ -1571,7 +1607,7 @@
           "llmModelConfig": {
             "cache": "",
             "modelName": "gpt-4o-mini",
-            "temperature": 0.9,
+            "temperature": 0.2,
             "streaming": true,
             "allowImageUploads": "",
             "reasoning": "",
@@ -1687,8 +1723,8 @@
         "inputAnchors": [],
         "inputs": {
           "loopBackToNode": "llmAgentflow_0-Supervisor",
-          "maxLoopCount": 5,
-          "fallbackMessage": "",
+          "maxLoopCount": 3,
+          "fallbackMessage": "Workflow stopped after exceeding maximum iterations. Manual review recommended to prevent recursive execution loops.",
           "loopUpdateState": ""
         },
         "outputAnchors": [],
@@ -1981,10 +2017,15 @@
         "inputAnchors": [],
         "inputs": {
           "llmModel": "chatOpenAI",
-          "llmMessages": [],
+          "llmMessages": [
+            {
+              "role": "system",
+              "content": "You are generating the final consolidated engineering delivery report.\n\nCombine:\n- Final implementation\n- Reviewer feedback\n- Architectural improvements\n- Security/performance recommendations\n- Production-readiness assessment\n\nGenerate a polished engineering handoff document."
+            }
+          ],
           "llmEnableMemory": true,
           "llmMemoryType": "allMessages",
-          "llmUserMessage": "Given the above conversation, generae a detail solution developed by the software engineer and code reviewer. Include full code, improvements and review. ",
+          "llmUserMessage": "Generate a complete engineering delivery package including:\n\n1. Executive Summary\n2. Architecture Overview\n3. Final Production Code\n4. Reviewer Findings\n5. Risks and Mitigations\n6. Recommended Next Steps\n7. Production Deployment Considerations\n8. Future Scalability Improvements",
           "llmReturnResponseAs": "userMessage",
           "llmStructuredOutput": "",
           "llmUpdateState": "",
