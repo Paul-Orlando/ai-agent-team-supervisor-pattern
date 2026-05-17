@@ -132,6 +132,42 @@ The workflow maintains runtime state including:
 
 ---
 
+## Example Output — Renaissance Research AI
+
+**Input:** "Build an AI research platform for graduate 
+students studying Renaissance paintings"
+
+**The system autonomously produced:**
+
+### Technology Stack
+- Frontend: Next.js, TypeScript, TailwindCSS
+- Backend: FastAPI, PostgreSQL, Redis
+- AI Stack: GPT-4o, LangGraph, Pinecone, OCR Pipeline
+
+### Database Schema (excerpt)
+CREATE TABLE paintings (
+    id UUID PRIMARY KEY,
+    title TEXT,
+    artist TEXT,
+    embedding VECTOR(1536)
+);
+
+### Reviewer Findings
+- ✅ Strong academic specialization
+- ✅ Scalable semantic architecture
+- ⚠️ OCR costs flagged
+- ⚠️ Hallucination risk noted
+- ⚠️ Image storage scaling recommended
+
+### Deployment Architecture
+- Frontend: Vercel
+- Backend: AWS ECS
+- Database: Supabase/Postgres
+- Vector DB: Pinecone
+- Monitoring: LangSmith + OpenTelemetry
+
+---
+
 ## Research Example
 
 Example generated project:
